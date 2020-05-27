@@ -24,6 +24,8 @@ def check():
         lbl.configure(text = "Please enter a positive whole number")
     elif num == 1:
         lbl.configure(text = "The number is not a prime")
+    elif num == 2 or num == 3:
+        lbl.configure(text = "The number is a prime!!!")
     for i in range(2, int(num**0.5) + 1):
         if num % i == 0:
             lbl.configure(text = "The number is not a prime")
