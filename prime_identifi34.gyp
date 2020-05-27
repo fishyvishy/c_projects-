@@ -1,7 +1,11 @@
 import tkinter as tk
 window = tk.Tk()
 window.title("Prime Identifier")
-window.geometry('268x175')
+window.geometry("268x175")
+pright = int(window.winfo_screenwidth()/2 - 268/2)
+pdown = int(window.winfo_screenheight()/2.4 - 175/2)
+window.geometry("+{}+{}".format(pright,pdown))
+
 intro = tk.Label(window, text = "Prime Identifier", font = ("Cambria", 40))
 intro.grid(column=1, row=0)
 
