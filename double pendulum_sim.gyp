@@ -21,6 +21,8 @@ class main(tk.Tk):
         self.ang1_v, self.ang2_v = 0, 0
         self.delt_t = 0.1
         self.trace_coord = []
+        self.z = 1
+        self.pause = 0
         self.after(1, self.movement)
 
     def movement(self):
@@ -59,9 +61,23 @@ class main(tk.Tk):
         self.canvas.create_line(220 + x1, 150 + y1, 220 + x2, 150 + y2, fill = 'coral1', tag = 'Pendulum')
         self.canvas.create_oval(210 + x1, 160 + y1, 230 + x1, 140 + y1, fill = 'coral1', outline = '', tag = 'Pendulum')
         self.canvas.create_oval(210 + x2, 160 + y2, 230 + x2, 140 + y2, fill = 'coral1', outline = '', tag = 'Pendulum')
+    
+        def keypress(event):
+            self.canvas.delete('intro')
+            self.after(1, self.movement)
 
-        self.after(1, self.movement)
+        def pass_ev(event):
+            pass
+
+        if self.z > 0:
+            print(self.ang1, self.ang2)
+            self.canvas.create_text(220, 400, fill = 'gray30', font = 'times 20', text = "Press return", tag = 'intro')
+            self.bind("<Return>", keypress)
+            self.z -= 1
         
+        else:
+            self.bind("<Return>", pass_ev)
+            self.after(1, self.movement)
+               
 sim = main()
-print(sim.ang1, sim.ang2)
 sim.mainloop()
