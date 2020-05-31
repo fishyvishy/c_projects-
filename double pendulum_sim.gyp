@@ -71,7 +71,7 @@ class main(tk.Tk):
 
         if self.z > 0:
             print(self.ang1, self.ang2)
-            self.canvas.create_text(220, 400, fill = 'gray30', font = 'times 20', text = "Press return", tag = 'intro')
+            self.canvas.create_text(220, 400, fill = 'gray30', font = 'hussar 20 italic', text = "Press return", tag = 'intro')
             self.bind("<Return>", keypress)
             self.z -= 1
         
