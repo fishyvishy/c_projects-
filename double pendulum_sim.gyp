@@ -72,8 +72,6 @@ class main(tk.Tk):
 
         if self.z > 0:
             print(self.ang1, self.ang2)
-            self.canvas.create_line(220, 150, 220, 135 + r1, dash = (2,1), fill = 'gray30', tag = 'normal')
-            self.canvas.create_line(220 + x1, 150 + y1, 220 + x1, 135 + y1 + r2, dash = (2,1), fill = 'gray30', tag = 'normal')
             self.canvas.create_text(220, 400, fill = 'gray30', font = 'hussar 20 italic', text = "Press return", tag = 'intro')
             self.bind("<Return>", keypress)
             self.z -= 1
