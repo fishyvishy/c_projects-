@@ -15,10 +15,12 @@ class main(tk.Tk):
         self.circle_count = 0
         self.after(1, self.create_background)
 
-    def create_background(self):
+    def create_background(self, *args):
+        self.canvas.delete('all')
+        self.unbind('<Key>')
         self.canvas.create_rectangle(6, 400, 400, 6, fill = 'dodgerblue', outline = 'red3', width = 0)
         self.canvas.create_oval(6, 400, 400, 6, fill = 'coral1', outline = None, width = 0)
-        self.canvas.create_text(197, 180, fill = 'gray30', font = 'hussar 20 italic', text = "Enter a Number", tag = 'intro')
+        self.canvas.create_text(197, 180, fill = 'gray22', font = 'hussar 20 italic', text = "Enter a Number", tag = 'intro')
         self.entry = tk.Entry(self, width = 15, bd = 0, highlightcolor = 'gray')
         self.canvas.create_window(197, 212, window = self.entry, tag = 'slot')
 
@@ -56,8 +58,9 @@ class main(tk.Tk):
         self.unbind('<Return>')
         self.text1 = '\u03C0 \u2248 ' + str(round(self.res,5))
         self.text2 = str(round(self.error, 5)) + '%'
-        self.canvas.create_text(197, 177, fill = 'white', font = 'hussar 20 italic', text = self.text1)
-        self.canvas.create_text(197, 212, fill = 'white', font = 'hussar 20 italic', text = self.text2)
+        self.canvas.create_text(197, 188, fill = 'white', font = 'hussar 20 italic', text = self.text1)
+        self.canvas.create_text(197, 215, fill = 'white', font = 'hussar 20 italic', text = self.text2)
+        self.bind('<Key>', self.create_background)
 
 sim = main()
 sim.mainloop()
