@@ -1,19 +1,8 @@
 from fractions import Fraction
-
-#User input
-rows = int(input('Number of rows\n'))
-columns = int(input('Number of columns\n'))
-initial = []
-for i in range(rows):
-    row = []
-    for j in range(columns):
-        coeff = eval(input('Coefficient ' + str(j + 1) + ' for row ' + str(i + 1) +  ': '))
-        row.append(coeff)
-    initial.append(row)
-print('\nOriginal Matrix: ' + str(initial) + '\n')
+from typing import List
 
 #Row Echelon Conversion
-def row_echelon(matrix):
+def row_echelon(matrix: List[List[float]]) -> List[List[float]]:
     for row in range(len(matrix)):
         reorder(row, matrix)
         #find first non-zero element in each reordered row
@@ -25,7 +14,7 @@ def row_echelon(matrix):
         scaling(row, non_zero, matrix)
         #shear rows below row
         shearing(row, non_zero, matrix)
-    
+        
     #copy matrix with floats (input for convert_to_rre)
     output = []
     for row in matrix:
@@ -39,7 +28,7 @@ def row_echelon(matrix):
     return output
 
 #helper functions for row_echelon
-def reorder(row_i, matrix):  
+def reorder(row_i: int, matrix: List[List[float]]) -> None:  
     zero = False
     for column in range(len(matrix[row_i])):
         for row in range(row_i, len(matrix)):
@@ -53,7 +42,7 @@ def reorder(row_i, matrix):
                     op = 'R' + str(row_i + 1) + ' <=> ' + 'R' + str(row + 1) + ' : '
                     print(op + str(matrix))
 
-def scaling(row, non_zero, matrix):
+def scaling(row: int, non_zero: int, matrix: List[List[float]]) -> None:
     scalar = matrix[row][non_zero]
     if scalar != 0:
         for num in range(len(matrix[row])):
@@ -64,7 +53,7 @@ def scaling(row, non_zero, matrix):
         op = 'R' + str(row + 1) + ' => ' + frac + 'R' + str(row + 1) + ' : '
         print(op + str(matrix))
 
-def shearing(row, non_zero, matrix):
+def shearing(row: int, non_zero: int, matrix: List[List[float]]) -> None:
     for lower in range(row + 1, len(matrix)):
         scalar_2 = matrix[lower][non_zero]
         if scalar_2 != 0:
@@ -81,7 +70,7 @@ def shearing(row, non_zero, matrix):
             print(op + str(matrix))
 
 #Reduced Row Echelon Conversion
-def convert_to_rre(matrix):
+def convert_to_rre(matrix: List[List[float]]) -> None:
     for row in range(len(matrix) - 1, -1 , -1):
         ech_index = 0
         while int(matrix[row][ech_index]) != 1 and ech_index < len(matrix[row]) - 1:
@@ -99,7 +88,7 @@ def convert_to_rre(matrix):
     print('\nReduced Row Echelon: ' + str(matrix) + '\n')
 
 #helper function for convert_to_rre
-def backpass(row, ech_index, matrix):
+def backpass(row: int, ech_index: int, matrix: List[List[float]]) -> None:
     for upper in range(row - 1, -1, -1):
         if matrix[upper][ech_index] != 0:
             scalar_3 = matrix[upper][ech_index]
@@ -115,9 +104,21 @@ def backpass(row, ech_index, matrix):
             op = r_ind + ' => ' + r_ind + ' - ' + frac + r_shear + ' : '
             print(op + str(matrix))
 
+if __name__ == "__main__":
+    #User input
+    rows = int(input('Number of rows\n'))
+    columns = int(input('Number of columns\n'))
+    initial = []
+    for i in range(rows):
+        row = []
+        for j in range(columns):
+            coeff = eval(input('Coefficient ' + str(j + 1) + ' for row ' + str(i + 1) +  ': '))
+            row.append(coeff)
+        initial.append(row)
+    print('\nOriginal Matrix: ' + str(initial) + '\n')
 
-init = row_echelon(initial)
-rre = input(('Convert to Reduced Row Echelon? (Press 1) '))
-if rre == '1':
-    print('')
-    convert_to_rre(init)
+    init = row_echelon(initial)
+    rre = input(('Convert to Reduced Row Echelon? (Press 1) '))
+    if rre == '1':
+        print('')
+        convert_to_rre(init)
