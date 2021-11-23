@@ -1,8 +1,7 @@
 from fractions import Fraction
-from typing import List
 
 #Row Echelon Conversion
-def row_echelon(matrix: List[List[float]]) -> List[List[float]]:
+def row_echelon(matrix):
     for row in range(len(matrix)):
         reorder(row, matrix)
         #find first non-zero element in each reordered row
@@ -14,7 +13,7 @@ def row_echelon(matrix: List[List[float]]) -> List[List[float]]:
         scaling(row, non_zero, matrix)
         #shear rows below row
         shearing(row, non_zero, matrix)
-        
+    
     #copy matrix with floats (input for convert_to_rre)
     output = []
     for row in matrix:
@@ -28,7 +27,7 @@ def row_echelon(matrix: List[List[float]]) -> List[List[float]]:
     return output
 
 #helper functions for row_echelon
-def reorder(row_i: int, matrix: List[List[float]]) -> None:  
+def reorder(row_i, matrix):  
     zero = False
     for column in range(len(matrix[row_i])):
         for row in range(row_i, len(matrix)):
@@ -42,7 +41,7 @@ def reorder(row_i: int, matrix: List[List[float]]) -> None:
                     op = 'R' + str(row_i + 1) + ' <=> ' + 'R' + str(row + 1) + ' : '
                     print(op + str(matrix))
 
-def scaling(row: int, non_zero: int, matrix: List[List[float]]) -> None:
+def scaling(row, non_zero, matrix):
     scalar = matrix[row][non_zero]
     if scalar != 0:
         for num in range(len(matrix[row])):
@@ -53,7 +52,7 @@ def scaling(row: int, non_zero: int, matrix: List[List[float]]) -> None:
         op = 'R' + str(row + 1) + ' => ' + frac + 'R' + str(row + 1) + ' : '
         print(op + str(matrix))
 
-def shearing(row: int, non_zero: int, matrix: List[List[float]]) -> None:
+def shearing(row, non_zero, matrix):
     for lower in range(row + 1, len(matrix)):
         scalar_2 = matrix[lower][non_zero]
         if scalar_2 != 0:
@@ -70,7 +69,7 @@ def shearing(row: int, non_zero: int, matrix: List[List[float]]) -> None:
             print(op + str(matrix))
 
 #Reduced Row Echelon Conversion
-def convert_to_rre(matrix: List[List[float]]) -> None:
+def convert_to_rre(matrix):
     for row in range(len(matrix) - 1, -1 , -1):
         ech_index = 0
         while int(matrix[row][ech_index]) != 1 and ech_index < len(matrix[row]) - 1:
@@ -88,7 +87,7 @@ def convert_to_rre(matrix: List[List[float]]) -> None:
     print('\nReduced Row Echelon: ' + str(matrix) + '\n')
 
 #helper function for convert_to_rre
-def backpass(row: int, ech_index: int, matrix: List[List[float]]) -> None:
+def backpass(row, ech_index, matrix):
     for upper in range(row - 1, -1, -1):
         if matrix[upper][ech_index] != 0:
             scalar_3 = matrix[upper][ech_index]
