@@ -1,7 +1,8 @@
 from fractions import Fraction
+from typing import List
 
 #Row Echelon Conversion
-def row_echelon(matrix):
+def row_echelon(matrix: List[List[float]]) -> List[List[float]]:
     for row in range(len(matrix)):
         reorder(row, matrix)
         #find first non-zero element in each reordered row
@@ -13,21 +14,12 @@ def row_echelon(matrix):
         scaling(row, non_zero, matrix)
         #shear rows below row
         shearing(row, non_zero, matrix)
-    
-    #copy matrix with floats (input for convert_to_rre)
-    output = []
-    for row in matrix:
-        output.append(row[:])
 
-    #convert matrix elements to fractions for printing
-    for row in range(len(matrix)):
-        for column in range(len(matrix[row])):
-            matrix[row][column] = str(Fraction(matrix[row][column]).limit_denominator())
-    print('\nRow Echelon: ' + str(matrix) + '\n')
-    return output
+    print('\nRow Echelon: ' + str(fractionalize(matrix)) + '\n')
+    return matrix
 
 #helper functions for row_echelon
-def reorder(row_i, matrix):  
+def reorder(row_i: int, matrix: List[List[float]]) -> None:  
     zero = False
     for column in range(len(matrix[row_i])):
         for row in range(row_i, len(matrix)):
@@ -39,9 +31,9 @@ def reorder(row_i, matrix):
                 #print row operation
                 if row != row_i:
                     op = 'R' + str(row_i + 1) + ' <=> ' + 'R' + str(row + 1) + ' : '
-                    print(op + str(matrix))
+                    print(op + str(fractionalize(matrix)))
 
-def scaling(row, non_zero, matrix):
+def scaling(row: int, non_zero: int, matrix: List[List[float]]) -> None:
     scalar = matrix[row][non_zero]
     if scalar != 0:
         for num in range(len(matrix[row])):
@@ -50,9 +42,9 @@ def scaling(row, non_zero, matrix):
         #print row operation
         frac = str(Fraction(scalar ** (-1)).limit_denominator())
         op = 'R' + str(row + 1) + ' => ' + frac + 'R' + str(row + 1) + ' : '
-        print(op + str(matrix))
+        print(op + str(fractionalize(matrix)))
 
-def shearing(row, non_zero, matrix):
+def shearing(row: int, non_zero: int, matrix: List[List[float]]) -> None:
     for lower in range(row + 1, len(matrix)):
         scalar_2 = matrix[lower][non_zero]
         if scalar_2 != 0:
@@ -66,10 +58,10 @@ def shearing(row, non_zero, matrix):
             r_shear = 'R' + str(row + 1)
             frac = str(Fraction(scalar_2).limit_denominator())
             op = r_ind + ' => ' + frac + r_shear + ' - ' + r_ind + ' : '
-            print(op + str(matrix))
+            print(op + str(fractionalize(matrix)))
 
 #Reduced Row Echelon Conversion
-def convert_to_rre(matrix):
+def convert_to_rre(matrix: List[List[float]]) -> None:
     for row in range(len(matrix) - 1, -1 , -1):
         ech_index = 0
         while int(matrix[row][ech_index]) != 1 and ech_index < len(matrix[row]) - 1:
@@ -78,16 +70,11 @@ def convert_to_rre(matrix):
         #shear rows above row
         if matrix[row][ech_index] != 0:
             backpass(row, ech_index, matrix)
-
-    #convert matrix elements to fractions for printing
-    for row in range(len(matrix)):
-        for column in range(len(matrix[row])):
-            matrix[row][column] = str(Fraction(matrix[row][column]).limit_denominator())
     
-    print('\nReduced Row Echelon: ' + str(matrix) + '\n')
+    print('\nReduced Row Echelon: ' + str(fractionalize(matrix)) + '\n')
 
 #helper function for convert_to_rre
-def backpass(row, ech_index, matrix):
+def backpass(row: int, ech_index: int, matrix: List[List[float]]) -> None:
     for upper in range(row - 1, -1, -1):
         if matrix[upper][ech_index] != 0:
             scalar_3 = matrix[upper][ech_index]
@@ -101,7 +88,18 @@ def backpass(row, ech_index, matrix):
             r_shear = 'R' + str(row + 1)
             frac = str(Fraction(scalar_3).limit_denominator())
             op = r_ind + ' => ' + r_ind + ' - ' + frac + r_shear + ' : '
-            print(op + str(matrix))
+            print(op + str(fractionalize(matrix)))
+
+def fractionalize(matrix: List[List[float]]) -> List[List[str]]:
+    '''return fractionalized matrix for print statments'''
+    p_matrix = []
+    for row in matrix:
+        p_matrix.append(row[:])
+    for row in range(len(matrix)):
+        for column in range(len(matrix[row])):
+            p_matrix[row][column] = str(Fraction(matrix[row][column]).limit_denominator())
+
+    return p_matrix
 
 if __name__ == "__main__":
     #User input
