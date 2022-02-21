@@ -1,25 +1,32 @@
 from fractions import Fraction
 from typing import List
 
-#Row Echelon Conversion
+
+# Row Echelon Conversion
 def row_echelon(matrix: List[List[float]]) -> List[List[float]]:
     for row in range(len(matrix)):
         reorder(row, matrix)
-        #find first non-zero element in each reordered row
+        # find first non-zero element in each reordered row
         non_zero = 0
         while matrix[row][non_zero] == 0 and non_zero < len(matrix[row]) - 1:
             non_zero += 1
 
-        #scale row
+        # scale row
         scaling(row, non_zero, matrix)
-        #shear rows below row
+        # shear rows below row
         shearing(row, non_zero, matrix)
 
-    print('\nRow Echelon: ' + str(fractionalize(matrix)) + '\n')
+    print('\nRow Echelon: ')
+    l = fractionalize(matrix)
+    for row in l:
+        print(str(row))
+    print('')
+
     return matrix
 
-#helper functions for row_echelon
-def reorder(row_i: int, matrix: List[List[float]]) -> None:  
+
+# helper functions for row_echelon
+def reorder(row_i: int, matrix: List[List[float]]) -> None:
     zero = False
     for column in range(len(matrix[row_i])):
         for row in range(row_i, len(matrix)):
@@ -28,10 +35,11 @@ def reorder(row_i: int, matrix: List[List[float]]) -> None:
                 matrix[row_i] = matrix[row]
                 matrix[row] = hold
                 zero = True
-                #print row operation
+                # print row operation
                 if row != row_i:
                     op = 'R' + str(row_i + 1) + ' <=> ' + 'R' + str(row + 1) + ' : '
                     print(op + str(fractionalize(matrix)))
+
 
 def scaling(row: int, non_zero: int, matrix: List[List[float]]) -> None:
     scalar = matrix[row][non_zero]
@@ -39,10 +47,11 @@ def scaling(row: int, non_zero: int, matrix: List[List[float]]) -> None:
         for num in range(len(matrix[row])):
             matrix[row][num] = (matrix[row][num])/scalar
 
-        #print row operation
+        # print row operation
         frac = str(Fraction(scalar ** (-1)).limit_denominator())
         op = 'R' + str(row + 1) + ' => ' + frac + 'R' + str(row + 1) + ' : '
         print(op + str(fractionalize(matrix)))
+
 
 def shearing(row: int, non_zero: int, matrix: List[List[float]]) -> None:
     for lower in range(row + 1, len(matrix)):
@@ -53,14 +62,15 @@ def shearing(row: int, non_zero: int, matrix: List[List[float]]) -> None:
                 sheared = matrix[lower][element]
                 matrix[lower][element] = shear - sheared
 
-            #print row operation
+            # print row operation
             r_ind = 'R' + str(lower + 1)
             r_shear = 'R' + str(row + 1)
             frac = str(Fraction(scalar_2).limit_denominator())
             op = r_ind + ' => ' + frac + r_shear + ' - ' + r_ind + ' : '
             print(op + str(fractionalize(matrix)))
 
-#Reduced Row Echelon Conversion
+
+# Reduced Row Echelon Conversion
 def convert_to_rre(matrix: List[List[float]]) -> None:
     for row in range(len(matrix) - 1, -1 , -1):
         ech_index = 0
@@ -70,10 +80,15 @@ def convert_to_rre(matrix: List[List[float]]) -> None:
         #shear rows above row
         if matrix[row][ech_index] != 0:
             backpass(row, ech_index, matrix)
-    
-    print('\nReduced Row Echelon: ' + str(fractionalize(matrix)) + '\n')
 
-#helper function for convert_to_rre
+    # print('\nReduced Row Echelon: ' + str(fractionalize(matrix)) + '\n')
+    print('\nReduced Row Echelon: ')
+    l = fractionalize(matrix)
+    for row in l:
+        print(str(row))
+
+
+# helper function for convert_to_rre
 def backpass(row: int, ech_index: int, matrix: List[List[float]]) -> None:
     for upper in range(row - 1, -1, -1):
         if matrix[upper][ech_index] != 0:
@@ -83,15 +98,16 @@ def backpass(row: int, ech_index: int, matrix: List[List[float]]) -> None:
                 sheared = matrix[upper][element]
                 matrix[upper][element] = sheared - shear
 
-            #print row operation
+            # print row operation
             r_ind = 'R' + str(upper + 1)
             r_shear = 'R' + str(row + 1)
             frac = str(Fraction(scalar_3).limit_denominator())
             op = r_ind + ' => ' + r_ind + ' - ' + frac + r_shear + ' : '
             print(op + str(fractionalize(matrix)))
 
+
 def fractionalize(matrix: List[List[float]]) -> List[List[str]]:
-    '''return fractionalized matrix for print statments'''
+    '''Return fractionalized matrix for print statments'''
     p_matrix = []
     for row in matrix:
         p_matrix.append(row[:])
@@ -101,21 +117,27 @@ def fractionalize(matrix: List[List[float]]) -> List[List[str]]:
 
     return p_matrix
 
+
 if __name__ == "__main__":
-    #User input
+    # User input
     rows = int(input('Number of rows\n'))
     columns = int(input('Number of columns\n'))
     initial = []
     for i in range(rows):
         row = []
         for j in range(columns):
-            coeff = eval(input('Coefficient ' + str(j + 1) + ' for row ' + str(i + 1) +  ': '))
+            coeff = eval(input('Coefficient ' + str(j + 1) + ' for row ' + str(i + 1) + ': '))
             row.append(coeff)
         initial.append(row)
-    print('\nOriginal Matrix: ' + str(initial) + '\n')
+    # print('\nOriginal Matrix: ' + str(initial) + '\n')
+    print('\nOriginal Matrix: ')
+    l = fractionalize(initial)
+    for row in l:
+        print(str(row))
+    print('')
 
     init = row_echelon(initial)
-    rre = input(('Convert to Reduced Row Echelon? (Press 1) '))
+    rre = input('Convert to Reduced Row Echelon? (Press 1) ')
     if rre == '1':
         print('')
         convert_to_rre(init)
