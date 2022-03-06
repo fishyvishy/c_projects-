@@ -1,4 +1,4 @@
-Bezier Curve Sketching and Animating program in Python.
+Bezier Curve Sketching and Animating program in Python.\\
 Download files into local directory. 
 Run bezier_curves.py
 Key Commands:
