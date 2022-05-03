@@ -1,3 +1,2 @@
 # c_projects-
-random projects
-random programs
+Random small projects
